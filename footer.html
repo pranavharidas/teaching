@@ -1,0 +1,50 @@
+<footer class="text-center py-6 mt-12 border-t border-slate-200">
+    <p class="text-sm text-slate-500">© <span id="current-year"></span> Pranav Haridas. All rights reserved.</p>
+</footer>
+<script>
+    // Set Current Year in Footer
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+    // Scrollspy functionality
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('#main-nav a');
+    const navHeight = document.getElementById('main-nav')?.offsetHeight || 60;
+    const activateNavLink = (id) => {
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${id}`) {
+                link.classList.add('active');
+            }
+        });
+    };
+
+    const onScroll = () => {
+        let currentSectionId = '';
+        const scrollPosition = window.pageYOffset;
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const activationOffset = navHeight * 1.5;
+            if (scrollPosition >= sectionTop - activationOffset) {
+                currentSectionId = section.getAttribute('id');
+            }
+        });
+        const lastSection = sections[sections.length - 1];
+        if (scrollPosition + window.innerHeight >= document.documentElement.scrollHeight - 50) {
+            currentSectionId = lastSection.getAttribute('id');
+        }
+        if (scrollPosition < sections[0].offsetTop - navHeight * 2) {
+            currentSectionId = sections[0].getAttribute('id');
+        }
+        if (currentSectionId) {
+            activateNavLink(currentSectionId);
+        } else if (navLinks.length > 0) {
+            activateNavLink(sections[0].getAttribute('id'));
+        }
+    };
+
+    if (sections.length > 0) {
+        window.addEventListener('scroll', onScroll);
+        window.addEventListener('load', onScroll);
+    }
+</script>
+</body>
+</html>

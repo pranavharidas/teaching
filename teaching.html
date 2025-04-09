@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pranav Haridas - Teaching</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                packages: ['base', 'ams']
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/ams']
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div data-include="header.html"></div>
+
+    <main class="container mx-auto py-10 px-4">
+        <section id="teaching" class="bg-white rounded-lg shadow-md p-6 space-y-6">
+            
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Teaching</h2>
+            <div class="space-y-4">
+                <h3 class="text-xl font-semibold text-sky-600">Courses</h3>
+                <ul class="list-none pl-8 space-y-2 styled-list">
+                    <li class="text-slate-700 leading-relaxed">Differential Equations (Spring 2023 at Kerala School of Mathematics)</li>
+                    <li class="text-slate-700 leading-relaxed">Algebraic Topology (Fall 2022 at Kerala School of Mathematics)</li>
+                    <li class="text-slate-700 leading-relaxed">Differential Geometry (Fall 2021 and Spring 2022 at Kerala School of Mathematics)</li>
+                    <li class="text-slate-700 leading-relaxed">Complex Analysis (Spring 2021 at Kerala School of Mathematics)</li>
+                    <li class="text-slate-700 leading-relaxed">Topology (Fall 2020 at Kerala School of Mathematics)</li>
+                    <li class="text-slate-700 leading-relaxed">Complex Analysis (Spring 2020 in the online portal Swayam Central. Please click <a href="https://nptel.ac.in/courses/111106141" target="_blank" class="text-sky-600 hover:text-sky-800 hover:underline decoration-sky-300 underline-offset-2 transition duration-150 ease-in-out">here</a> for the online lectures)</li>
+                    <li class="text-slate-700 leading-relaxed">Linear Algebra (Fall 2020 in the online portal Swayam Central. Please click <a href="https://nptel.ac.in/courses/111106135" target="_blank" class="text-sky-600 hover:text-sky-800 hover:underline decoration-sky-300 underline-offset-2 transition duration-150 ease-in-out">here</a> for the online lectures)</li>
+                    <li class="text-slate-700 leading-relaxed">Linear Algebra and Numerical Analysis (Spring 2016 and Spring 2017 at Indian Institute of Technology Madras)</li>
+                    <li class="text-slate-700 leading-relaxed">Riemann Surfaces (Fall 2018 at Chennai Mathematical Institute)</li>
+                </ul>
+            </div>
+            <div class="space-y-4">
+                <p class="text-lg text-slate-600 leading-relaxed">
+                    In this semester I am offering a course on Algebraic Topology at Kerala School of Mathematics.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <div data-include="footer.html"></div>
+
+    <script>
+    // Simple script to include HTML content.  For production, you'd use a server-side include or a more robust client-side solution.
+    document.addEventListener('DOMContentLoaded', () => {
+        const includeElements = document.querySelectorAll('[data-include]');
+        includeElements.forEach(element => {
+            const url = element.getAttribute('data-include');
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    element.outerHTML = html; // Replace the element with the fetched content.
+                    // --- Navigation Active State Scrollspy ---
+                    const sections = document.querySelectorAll('section[id]');
+                    const navLinks = document.querySelectorAll('.top-nav a');
+                    const navHeight = document.getElementById('main-nav')?.offsetHeight || 70;
+
+                    const activateNavLink = (id) => {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    };
+
+                    const onScroll = () => {
+                        let currentSectionId = '';
+                        const scrollPosition = window.pageYOffset;
+
+                        sections.forEach(section => {
+                            const sectionTop = section.offsetTop;
+                            const activationOffset = navHeight * 1.5;
+
+                            if (scrollPosition >= sectionTop - activationOffset) {
+                                currentSectionId = section.getAttribute('id');
+                            }
+                        });
+
+                        const lastSection = sections[sections.length - 1];
+                        if (scrollPosition + window.innerHeight >= document.documentElement.scrollHeight - 50) {
+                            currentSectionId = lastSection.getAttribute('id');
+                        }
+
+                        if (scrollPosition < sections[0].offsetTop - navHeight * 2) {
+                            currentSectionId = sections[0].getAttribute('id');
+                        }
+
+
+                        if (currentSectionId) {
+                            activateNavLink(currentSectionId);
+                        } else if (navLinks.length > 0) {
+                            activateNavLink(sections[0].getAttribute('id'));
+                        }
+                    };
+
+                    window.addEventListener('scroll', onScroll);
+                    window.addEventListener('load', onScroll);
+
+
+                    // --- Set Current Year ---
+                    const yearSpan = document.getElementById('current-year');
+                    if(yearSpan){
+                        yearSpan.textContent = new Date().getFullYear();
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Error fetching include:', error);
+                    element.outerHTML = `<div class="text-red-500">Failed to load include: ${url}</div>`;
+                });
+        });
+    });
+    </script>
+</body>
+</html>
